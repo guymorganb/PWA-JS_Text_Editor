@@ -4,12 +4,13 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "",
-    "start": "",
-    "server": "",
-    "build": "",
-    "install": "",
-    "client": ""
+    "start:dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "build": "cd client && npm run build",
+    "install:client": "cd client && npm install",
+    "postinstall": "npm run build",
+    "client": "cd client && npm start"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +21,6 @@
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
-    "css-loader": "^6.8.1",
-    "nodemon": "^3.0.1",
-    "webpack-dev-server": "^4.15.1",
-    "webpack-merge": "^5.9.0"
+    "nodemon": "^2.0.4"
   }
 }
