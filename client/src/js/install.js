@@ -52,15 +52,6 @@ window.addEventListener('appinstalled', (event) => {
     modalCloseButton.addEventListener('click', () => {
         installModal.style.display = "none";
     });
+    deferredPrompt = null;
 });
-
-  
-  
-  
-  
-  
-
-  
-  
-  
   

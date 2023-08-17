@@ -1,5 +1,5 @@
 const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
-const { CacheFirst } = require('workbox-strategies');
+const { CacheFirst, StaleWhileRevalidate } = require('workbox-strategies');
 const { registerRoute } = require('workbox-routing');
 const { CacheableResponsePlugin } = require('workbox-cacheable-response');
 const { ExpirationPlugin } = require('workbox-expiration');
@@ -23,6 +23,8 @@ Here, a CacheFirst strategy is being set up for pages.
 This strategy will always try to fetch the latest content from the cache first. 
 If it's not available in the cache, it will fetch it from the network.
 */
+
+// caching javascript and html files
 const pageCache = new CacheFirst({
   cacheName: 'page-cache',
   plugins: [
@@ -35,33 +37,33 @@ const pageCache = new CacheFirst({
   ],
 });
 
-const imageCache = new CacheFirst({
-  cacheName: 'image-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-    new ExpirationPlugin({
-      maxEntries: 60, // Cache a maximum of 60 images.
-      maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for a maximum of 30 days.
-    }),
-  ],
-});
+// const imageCache = new CacheFirst({
+//   cacheName: 'image-cache',
+//   plugins: [
+//     new CacheableResponsePlugin({
+//       statuses: [0, 200],
+//     }),
+//     new ExpirationPlugin({
+//       maxEntries: 60, // Cache a maximum of 60 images.
+//       maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for a maximum of 30 days.
+//     }),
+//   ],
+// });
 
-const apiCache = new workbox.strategies.NetworkFirst({
-  cacheName: 'api-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-    new ExpirationPlugin({
-      maxEntries: 50, // Cache the latest 50 API calls.
-    }),
-  ],
-});
+// const apiCache = new workbox.strategies.NetworkFirst({
+//   cacheName: 'api-cache',
+//   plugins: [
+//     new CacheableResponsePlugin({
+//       statuses: [0, 200],
+//     }),
+//     new ExpirationPlugin({
+//       maxEntries: 50, // Cache the latest 50 API calls.
+//     }),
+//   ],
+// });
 
 // Implement asset caching
-const jsCssCache = new workbox.strategies.StaleWhileRevalidate({
+const jsCssCache = new StaleWhileRevalidate({
   cacheName: 'js-css-cache',
 });
 
@@ -79,15 +81,23 @@ registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 
 // Cache image files.
-registerRoute(
-  ({ request }) => request.destination === 'image', imageCache);
+// registerRoute(
+//   ({ request }) => request.destination === 'image', imageCache);
 
 // Cache API calls.
-registerRoute(
-  ({ url }) => url.pathname.startsWith('/api/'), apiCache);
+// registerRoute(
+//   ({ url }) => url.pathname.startsWith('/api/'), apiCache);
 
 // Cache JS and CSS files.
+// caches styles, script and workers
 registerRoute(
-  ({ request }) =>
-    request.destination === 'script' || request.destination === 'style', jsCssCache);
+  ({ request }) =>["style","script", "worker"].includes(request.destination), 
+  new StaleWhileRevalidate({
+    cacheName: "asset-cache", // location
+    plugins:[
+      new CacheableResponsePlugin({
+        statuses: [0,200]
+      })
+    ]
+  }))
 

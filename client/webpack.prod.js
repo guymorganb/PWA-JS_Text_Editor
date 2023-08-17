@@ -9,9 +9,7 @@ module.exports = merge(common, {
         // Inject a precache manifest into a custom service worker
         new InjectManifest({
             swSrc: './src-sw.js', // Source file for the custom service worker
-            swDest: './dist/sw.js', // Destination for the new service worker with the manifest
-            globDirectory: './dist', // Directory to look in for files to be precached
-            globPatterns: ['**/*.js', '**/*.css', '**/*.svg', '**/*.html'] // Patterns of files to precache
+            swDest: 'src-sw.js', // Destination for the new service worker with the manifest
         })
     ],
 });
