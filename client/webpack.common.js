@@ -6,6 +6,7 @@
 // Import required plugins and libraries
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
@@ -26,7 +27,7 @@ module.exports = {
             {
                 // Use babel-loader for JavaScript files
                 test: /\.m?js$/, // Match all .js files or .mjs files
-                exclude: /node_modules/, // Do not transpile files in node_modules
+                exclude: /(node_modules|bower_components)/, // Do not transpile files in node_modules
                 loader: 'babel-loader', // Use babel-loader for transpilation
                 options: {
                     presets: ["@babel/preset-env"],
@@ -45,9 +46,6 @@ module.exports = {
     },
     // Array of plugins to be applied to the build
     plugins: [
-        // this isnt necessary, it also ok to just delete the dist folder.
-        //new CleanWebpackPlugin(), // Clean the 'dist' directory before each build
-        // Generate an HTML file that includes references to the bundled assets
         new HtmlWebpackPlugin({
             template: './index.html', // Template file to use as base
             title: 'Webpack Plugin', // Set the title for the generated HTML file
@@ -70,6 +68,11 @@ module.exports = {
                 destination: path.join('assets','icons') // location inside the /dist
             },
             ]
+        }),
+              // Inject a precache manifest into a custom service worker
+        new InjectManifest({
+            swSrc: './src-sw.js', // Source file for the custom service worker
+            swDest: 'src-sw.js', // Destination for the new service worker with the manifest
         }),
         new MiniCssExtractPlugin({ // Initialize the plugin for extracting CSS
             filename: '[name].css',

@@ -58,9 +58,7 @@ if ('serviceWorker' in navigator) {
       showUpdateNotification(workboxSW);
 
       // Implement a skip waiting strategy
-      this.skipWaiting = () => {
-        workboxSW.messageSW({ type: 'SKIP_WAITING' });
-      };
+      workboxSW.messageSW({ type: 'SKIP_WAITING' });
     }
   });
   /*
@@ -79,9 +77,3 @@ the assets and the new version of the app is used.
 } else {
   console.error('Service workers are not supported in this browser.');
 }
-
-
-
-
-
-
