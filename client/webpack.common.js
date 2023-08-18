@@ -53,7 +53,7 @@ module.exports = {
         new WebpackPwaManifest({ // creates the manifest.json and adds it to the browser
             fingerprints: false,
             inject: true, // injects into the browser
-            name: 'JATE by 2U',
+            name: 'J.A.T.E',
             short_name: 'JATE',
             description: 'Just another text editor',
             background_color: '#272822',
