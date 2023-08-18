@@ -16,9 +16,9 @@
 
 > A progressive web application, which functions as a JavaScript text editor.
 
-### 🏠 [Homepage](https://github.com/guymorganb/PWA-JS_Text_Editor)
+### 🏠 [Homepage](https://github.com/guymorganb/PWA-JS_Text_Editor) Source Code is inside /SRC & /Client
 
-### 💫 [Demo](https://pwa-editor-text-a264f1397bce.herokuapp.com/)
+### 💫 [Demo](https://pwa-editor-text-23103ec48792.herokuapp.com/)
 
 ## Usage
 
